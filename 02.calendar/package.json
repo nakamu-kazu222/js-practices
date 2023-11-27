@@ -1,12 +1,16 @@
 {
   "scripts": {
     "fix": "prettier --write . && eslint --fix .",
-    "lint": "prettier --check . && eslint ."
+    "lint": "prettier --check . && eslint .",
+    "format": "eslint '*.js' --fix && prettier --write '*.js'"
   },
   "devDependencies": {
     "eslint": "^8.43.0",
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^2.8.8"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "minimist": "^1.2.8"
+  }
 }
