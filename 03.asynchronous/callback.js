@@ -2,35 +2,37 @@ import sqlite3 from "sqlite3";
 
 const db1 = new sqlite3.Database(":memory:");
 
-db1.run(
-  "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-  function () {
-    db1.run(
-      "INSERT INTO book (title) VALUES (?)",
-      ["Sample Title"],
-      function () {
-        console.log("Inserted record ID:", this.lastID);
+function runNoErrorProgram() {
+  db1.run(
+    "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+    function () {
+      db1.run(
+        "INSERT INTO book (title) VALUES (?)",
+        ["Sample Title"],
+        function () {
+          console.log("Inserted record ID:", this.lastID);
 
-        db1.get(
-          "SELECT * FROM book WHERE id = ?",
-          [this.lastID],
-          function (err, row) {
-            if (err) {
-              console.error("Error retrieving record:", err.message);
-            } else {
-              console.log("Retrieved record:", row);
+          db1.get(
+            "SELECT * FROM book WHERE id = ?",
+            [this.lastID],
+            function (err, row) {
+              if (err) {
+                console.error("Error retrieving record:", err.message);
+              } else {
+                console.log("Retrieved record:", row);
+              }
+
+              db1.run("DROP TABLE book", function () {
+                db1.close();
+                runErrorProgram();
+              });
             }
-
-            db1.run("DROP TABLE book", function () {
-              db1.close();
-              runErrorProgram();
-            });
-          }
-        );
-      }
-    );
-  }
-);
+          );
+        }
+      );
+    }
+  );
+}
 
 function runErrorProgram() {
   const db2 = new sqlite3.Database(":memory:");
@@ -66,3 +68,5 @@ function runErrorProgram() {
     }
   );
 }
+
+runNoErrorProgram();
