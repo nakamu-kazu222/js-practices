@@ -44,12 +44,15 @@ async function runErrorProgram() {
       errorDB,
       "CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
     );
-
-    await runQuery(errorDB, "INSERT INTO memo (title) VALUES (?)", [
-      "Sample Title",
-    ]);
+    try {
+      await runQuery(errorDB, "INSERT INTO memo (title) VALUES (?)", [
+        "Sample Title",
+      ]);
+    } catch (err) {
+      console.error("Error inserting record:", err.message);
+    }
   } catch (err) {
-    console.error("Error inserting record:", err.message);
+    console.error("Error creating table:", err.message);
   }
 
   try {
