@@ -3,46 +3,49 @@ import { setTimeout } from "timers/promises";
 import { runQuery, getQuery } from "./run_get_query.js";
 
 async function runNoErrorProgram() {
-  const db1 = new sqlite3.Database(":memory:");
+  const noErrorDB = new sqlite3.Database(":memory:");
 
   try {
     await runQuery(
-      db1,
+      noErrorDB,
       "CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
     );
 
-    await runQuery(db1, "INSERT INTO book (title) VALUES (?)", [
+    await runQuery(noErrorDB, "INSERT INTO book (title) VALUES (?)", [
       "Sample Title",
     ]);
 
-    const lastID = await getQuery(db1, "SELECT last_insert_rowid() as id");
+    const lastID = await getQuery(
+      noErrorDB,
+      "SELECT last_insert_rowid() as id"
+    );
     console.log("Inserted record ID:", lastID.id);
 
-    const row = await getQuery(db1, "SELECT * FROM book WHERE id = ?", [
+    const row = await getQuery(noErrorDB, "SELECT * FROM book WHERE id = ?", [
       lastID.id,
     ]);
     console.log("Retrieved record:", row);
 
     await setTimeout(100);
 
-    await runQuery(db1, "DROP TABLE IF EXISTS book");
+    await runQuery(noErrorDB, "DROP TABLE IF EXISTS book");
   } catch (err) {
     console.error("Error in runNoErrorProgram:", err.message);
   } finally {
-    db1.close();
+    noErrorDB.close();
   }
 }
 
 async function runErrorProgram() {
-  const db2 = new sqlite3.Database(":memory:");
+  const errorDB = new sqlite3.Database(":memory:");
 
   try {
     await runQuery(
-      db2,
+      errorDB,
       "CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
     );
 
-    await runQuery(db2, "INSERT INTO memo (title) VALUES (?)", [
+    await runQuery(errorDB, "INSERT INTO memo (title) VALUES (?)", [
       "Sample Title",
     ]);
   } catch (err) {
@@ -50,13 +53,15 @@ async function runErrorProgram() {
   }
 
   try {
-    const row = await getQuery(db2, "SELECT * FROM memo WHERE id = ?", [999]);
+    const row = await getQuery(errorDB, "SELECT * FROM memo WHERE id = ?", [
+      999,
+    ]);
     console.log("Retrieved record:", row);
   } catch (err) {
     console.error("Error retrieving record:", err.message);
   } finally {
-    await runQuery(db2, "DROP TABLE IF EXISTS book");
-    db2.close();
+    await runQuery(errorDB, "DROP TABLE IF EXISTS book");
+    errorDB.close();
   }
 }
 

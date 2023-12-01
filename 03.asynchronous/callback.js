@@ -1,25 +1,25 @@
 import sqlite3 from "sqlite3";
 
-const db1 = new sqlite3.Database(":memory:");
+const noErrorDB = new sqlite3.Database(":memory:");
 
 function runNoErrorProgram() {
-  db1.run(
+  noErrorDB.run(
     "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
     function () {
-      db1.run(
+      noErrorDB.run(
         "INSERT INTO book (title) VALUES (?)",
         ["Sample Title"],
         function () {
           console.log("Inserted record ID:", this.lastID);
 
-          db1.get(
+          noErrorDB.get(
             "SELECT * FROM book WHERE id = ?",
             [this.lastID],
             (_, row) => {
               console.log("Retrieved record:", row);
 
-              db1.run("DROP TABLE book", function () {
-                db1.close(function () {
+              noErrorDB.run("DROP TABLE book", function () {
+                noErrorDB.close(function () {
                   runErrorProgram();
                 });
               });
@@ -32,12 +32,12 @@ function runNoErrorProgram() {
 }
 
 function runErrorProgram() {
-  const db2 = new sqlite3.Database(":memory:");
+  const errorDB = new sqlite3.Database(":memory:");
 
-  db2.run(
+  errorDB.run(
     "CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
     function () {
-      db2.run(
+      errorDB.run(
         "INSERT INTO memo (title) VALUES (?)",
         ["Sample Title"],
         function (err) {
@@ -47,7 +47,7 @@ function runErrorProgram() {
             console.log("Record inserted successfully");
           }
 
-          db2.get(
+          errorDB.get(
             "SELECT * FROM memo WHERE id = ?",
             [999],
             function (err, row) {
@@ -57,8 +57,8 @@ function runErrorProgram() {
                 console.log("Retrieved record:", row);
               }
 
-              db2.run("DROP TABLE IF EXISTS book", function () {
-                db2.close();
+              errorDB.run("DROP TABLE IF EXISTS book", function () {
+                errorDB.close();
               });
             }
           );
