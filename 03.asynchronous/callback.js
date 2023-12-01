@@ -4,7 +4,7 @@ import timers from "timers";
 const db1 = new sqlite3.Database(":memory:");
 
 db1.run(
-  "CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+  "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
   function () {
     db1.run(
       "INSERT INTO book (title) VALUES (?)",
