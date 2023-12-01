@@ -32,6 +32,7 @@ async function runNoErrorProgram() {
     console.error("Error in runNoErrorProgram:", err.message);
   } finally {
     noErrorDB.close();
+    await setTimeout(100);
   }
 }
 
