@@ -42,6 +42,8 @@ function runErrorProgram() {
         function (err) {
           if (err) {
             console.error("Error inserting record:", err.message);
+          } else {
+            console.log("Record inserted successfully");
           }
 
           db2.get(
