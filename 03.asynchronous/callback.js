@@ -15,12 +15,8 @@ function runNoErrorProgram() {
           db1.get(
             "SELECT * FROM book WHERE id = ?",
             [this.lastID],
-            function (err, row) {
-              if (err) {
-                console.error("Error retrieving record:", err.message);
-              } else {
-                console.log("Retrieved record:", row);
-              }
+            (_, row) => {
+              console.log("Retrieved record:", row);
 
               db1.run("DROP TABLE book", function () {
                 db1.close();
