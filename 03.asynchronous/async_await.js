@@ -11,18 +11,17 @@ async function runNoErrorProgram() {
       "CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
     );
 
-    await runQuery(noErrorDB, "INSERT INTO book (title) VALUES (?)", [
-      "Sample Title",
-    ]);
-
-    const lastID = await getQuery(
+    const result = await runQuery(
       noErrorDB,
-      "SELECT last_insert_rowid() as id"
+      "INSERT INTO book (title) VALUES (?)",
+      ["Sample Title"]
     );
-    console.log("Inserted record ID:", lastID.id);
+
+    const lastID = result.lastID;
+    console.log("Inserted record ID:", lastID);
 
     const row = await getQuery(noErrorDB, "SELECT * FROM book WHERE id = ?", [
-      lastID.id,
+      lastID,
     ]);
     console.log("Retrieved record:", row);
 
