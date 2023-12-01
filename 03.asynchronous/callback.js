@@ -1,5 +1,4 @@
 import sqlite3 from "sqlite3";
-import timers from "timers";
 
 const db1 = new sqlite3.Database(":memory:");
 
@@ -22,13 +21,10 @@ db1.run(
               console.log("Retrieved record:", row);
             }
 
-            timers.setTimeout(function () {
-              db1.run("DROP TABLE IF EXISTS book", function () {
-                db1.close();
-
-                runErrorProgram();
-              });
-            }, 100);
+            db1.run("DROP TABLE IF EXISTS book", function () {
+              db1.close();
+              runErrorProgram();
+            });
           }
         );
       }
