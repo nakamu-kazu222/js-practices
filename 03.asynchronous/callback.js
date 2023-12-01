@@ -19,8 +19,9 @@ function runNoErrorProgram() {
               console.log("Retrieved record:", row);
 
               db1.run("DROP TABLE book", function () {
-                db1.close();
-                runErrorProgram();
+                db1.close(function () {
+                  runErrorProgram();
+                });
               });
             }
           );
