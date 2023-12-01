@@ -14,12 +14,10 @@ function runNoErrorProgram() {
         "Sample Title",
       ])
     )
-    .then(() => getQuery(noErrorDB, "SELECT last_insert_rowid() as id"))
-    .then((lastID) => {
-      console.log("Inserted record ID:", lastID.id);
-      return getQuery(noErrorDB, "SELECT * FROM book WHERE id = ?", [
-        lastID.id,
-      ]);
+    .then((result) => {
+      const lastID = result.lastID;
+      console.log("Inserted record ID:", lastID);
+      return getQuery(noErrorDB, "SELECT * FROM book WHERE id = ?", [lastID]);
     })
     .then((row) => {
       console.log("Retrieved record:", row);
