@@ -21,7 +21,7 @@ db1.run(
               console.log("Retrieved record:", row);
             }
 
-            db1.run("DROP TABLE IF EXISTS book", function () {
+            db1.run("DROP TABLE book", function () {
               db1.close();
               runErrorProgram();
             });
