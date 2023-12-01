@@ -1,29 +1,6 @@
 import sqlite3 from "sqlite3";
 import { setTimeout } from "timers/promises";
-
-function runQuery(db, sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this);
-      }
-    });
-  });
-}
-
-function getQuery(db, sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, function (err, row) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(row);
-      }
-    });
-  });
-}
+import { runQuery, getQuery } from "./run_get_query.js";
 
 function runNoErrorProgram() {
   return new Promise((resolve, reject) => {
