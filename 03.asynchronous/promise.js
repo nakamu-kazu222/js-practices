@@ -21,7 +21,6 @@ function runNoErrorProgram() {
     })
     .then((row) => {
       console.log("Retrieved record:", row);
-      return setTimeout(100);
     })
     .then(() => runQuery(noErrorDB, "DROP TABLE IF EXISTS book"))
     .then(() => {

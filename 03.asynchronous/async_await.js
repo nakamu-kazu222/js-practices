@@ -25,8 +25,6 @@ async function runNoErrorProgram() {
     ]);
     console.log("Retrieved record:", row);
 
-    await setTimeout(100);
-
     await runQuery(noErrorDB, "DROP TABLE IF EXISTS book");
   } finally {
     noErrorDB.close();
