@@ -8,7 +8,7 @@ async function runNoErrorProgram() {
   try {
     await runQuery(
       noErrorDB,
-      "CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
+      "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
     );
 
     const result = await runQuery(
@@ -42,7 +42,7 @@ async function runErrorProgram() {
   try {
     await runQuery(
       errorDB,
-      "CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
+      "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
     );
     try {
       await runQuery(errorDB, "INSERT INTO memo (title) VALUES (?)", [

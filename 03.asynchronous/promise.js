@@ -7,7 +7,7 @@ function runNoErrorProgram() {
 
   return runQuery(
     noErrorDB,
-    "CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
+    "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
   )
     .then(() =>
       runQuery(noErrorDB, "INSERT INTO book (title) VALUES (?)", [
@@ -38,7 +38,7 @@ function runErrorProgram() {
 
   return runQuery(
     errorDB,
-    "CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
+    "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
   )
     .then(() =>
       runQuery(errorDB, "INSERT INTO memo (title) VALUES (?)", ["Sample Title"])

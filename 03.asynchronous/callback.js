@@ -35,7 +35,7 @@ function runErrorProgram() {
   const errorDB = new sqlite3.Database(":memory:");
 
   errorDB.run(
-    "CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+    "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
     function () {
       errorDB.run(
         "INSERT INTO memo (title) VALUES (?)",
