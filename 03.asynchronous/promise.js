@@ -27,9 +27,6 @@ function runNoErrorProgram() {
     .then(() => {
       noErrorDB.close();
       return setTimeout(100);
-    })
-    .catch((err) => {
-      console.error("Error in runNoErrorProgram:", err.message);
     });
 }
 

@@ -28,8 +28,6 @@ async function runNoErrorProgram() {
     await setTimeout(100);
 
     await runQuery(noErrorDB, "DROP TABLE IF EXISTS book");
-  } catch (err) {
-    console.error("Error in runNoErrorProgram:", err.message);
   } finally {
     noErrorDB.close();
     await setTimeout(100);
