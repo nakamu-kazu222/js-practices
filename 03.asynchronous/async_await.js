@@ -3,45 +3,41 @@ import { setTimeout } from "timers/promises";
 import { runQuery, getQuery } from "./run_get_query.js";
 
 async function runNoErrorProgram() {
-  const noErrorDB = new sqlite3.Database(":memory:");
+  const db = new sqlite3.Database(":memory:");
 
   try {
     await runQuery(
-      noErrorDB,
+      db,
       "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
     );
 
-    const result = await runQuery(
-      noErrorDB,
-      "INSERT INTO book (title) VALUES (?)",
-      ["Sample Title"]
-    );
+    const result = await runQuery(db, "INSERT INTO book (title) VALUES (?)", [
+      "Sample Title",
+    ]);
 
     const lastID = result.lastID;
     console.log("Inserted record ID:", lastID);
 
-    const row = await getQuery(noErrorDB, "SELECT * FROM book WHERE id = ?", [
-      lastID,
-    ]);
+    const row = await getQuery(db, "SELECT * FROM book WHERE id = ?", [lastID]);
     console.log("Retrieved record:", row);
 
-    await runQuery(noErrorDB, "DROP TABLE book");
+    await runQuery(db, "DROP TABLE book");
   } finally {
-    noErrorDB.close();
+    db.close();
     await setTimeout(100);
   }
 }
 
 async function runErrorProgram() {
-  const errorDB = new sqlite3.Database(":memory:");
+  const db = new sqlite3.Database(":memory:");
 
   try {
     await runQuery(
-      errorDB,
+      db,
       "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
     );
     try {
-      await runQuery(errorDB, "INSERT INTO memo (title) VALUES (?)", [
+      await runQuery(db, "INSERT INTO memo (title) VALUES (?)", [
         "Sample Title",
       ]);
     } catch (err) {
@@ -52,15 +48,13 @@ async function runErrorProgram() {
   }
 
   try {
-    const row = await getQuery(errorDB, "SELECT * FROM memo WHERE id = ?", [
-      999,
-    ]);
+    const row = await getQuery(db, "SELECT * FROM memo WHERE id = ?", [999]);
     console.log("Retrieved record:", row);
   } catch (err) {
     console.error("Error retrieving record:", err.message);
   } finally {
-    await runQuery(errorDB, "DROP TABLE book");
-    errorDB.close();
+    await runQuery(db, "DROP TABLE book");
+    db.close();
   }
 }
 
