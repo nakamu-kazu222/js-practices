@@ -22,7 +22,7 @@ function runNoErrorProgram() {
     .then((row) => {
       console.log("Retrieved record:", row);
     })
-    .then(() => runQuery(noErrorDB, "DROP TABLE IF EXISTS book"))
+    .then(() => runQuery(noErrorDB, "DROP TABLE book"))
     .then(() => {
       noErrorDB.close();
       return setTimeout(100);
@@ -49,7 +49,7 @@ function runErrorProgram() {
     .catch((err) => {
       console.error("Error retrieving record:", err.message);
     })
-    .then(() => runQuery(errorDB, "DROP TABLE IF EXISTS book"))
+    .then(() => runQuery(errorDB, "DROP TABLE book"))
     .then(() => {
       errorDB.close();
     })

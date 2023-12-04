@@ -57,7 +57,7 @@ function runErrorProgram() {
                 console.log("Retrieved record:", row);
               }
 
-              errorDB.run("DROP TABLE IF EXISTS book", function () {
+              errorDB.run("DROP TABLE book", function () {
                 errorDB.close();
               });
             }

@@ -25,7 +25,7 @@ async function runNoErrorProgram() {
     ]);
     console.log("Retrieved record:", row);
 
-    await runQuery(noErrorDB, "DROP TABLE IF EXISTS book");
+    await runQuery(noErrorDB, "DROP TABLE book");
   } finally {
     noErrorDB.close();
     await setTimeout(100);
@@ -59,7 +59,7 @@ async function runErrorProgram() {
   } catch (err) {
     console.error("Error retrieving record:", err.message);
   } finally {
-    await runQuery(errorDB, "DROP TABLE IF EXISTS book");
+    await runQuery(errorDB, "DROP TABLE book");
     errorDB.close();
   }
 }
