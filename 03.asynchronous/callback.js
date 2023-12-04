@@ -47,21 +47,17 @@ function runErrorProgram() {
             console.log("Record inserted successfully");
           }
 
-          errorDB.get(
-            "SELECT * FROM memo WHERE id = ?",
-            [999],
-            function (err, row) {
-              if (err) {
-                console.error("Error retrieving record:", err.message);
-              } else {
-                console.log("Retrieved record:", row);
-              }
-
-              errorDB.run("DROP TABLE book", function () {
-                errorDB.close();
-              });
+          errorDB.get("SELECT * FROM memo WHERE id = ?", [999], (err, row) => {
+            if (err) {
+              console.error("Error retrieving record:", err.message);
+            } else {
+              console.log("Retrieved record:", row);
             }
-          );
+
+            errorDB.run("DROP TABLE book", function () {
+              errorDB.close();
+            });
+          });
         }
       );
     }
