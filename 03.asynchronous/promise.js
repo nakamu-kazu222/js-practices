@@ -13,9 +13,8 @@ function runNoErrorProgram() {
       runQuery(db, "INSERT INTO book (title) VALUES (?)", ["Sample Title"])
     )
     .then((result) => {
-      const lastID = result.lastID;
-      console.log("Inserted record ID:", lastID);
-      return getQuery(db, "SELECT * FROM book WHERE id = ?", [lastID]);
+      console.log("Inserted record ID:", result.lastID);
+      return getQuery(db, "SELECT * FROM book WHERE id = ?", [result.lastID]);
     })
     .then((row) => {
       console.log("Retrieved record:", row);

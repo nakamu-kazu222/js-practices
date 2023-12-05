@@ -15,10 +15,11 @@ async function runNoErrorProgram() {
       "Sample Title",
     ]);
 
-    const lastID = result.lastID;
-    console.log("Inserted record ID:", lastID);
+    console.log("Inserted record ID:", result.lastID);
 
-    const row = await getQuery(db, "SELECT * FROM book WHERE id = ?", [lastID]);
+    const row = await getQuery(db, "SELECT * FROM book WHERE id = ?", [
+      result.lastID,
+    ]);
     console.log("Retrieved record:", row);
 
     await runQuery(db, "DROP TABLE book");
