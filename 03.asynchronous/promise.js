@@ -53,9 +53,6 @@ function runErrorProgram() {
     })
     .then(() => {
       db.close();
-    })
-    .catch((err) => {
-      console.error("Error in runErrorProgram:", err.message);
     });
 }
 
