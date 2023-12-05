@@ -40,14 +40,22 @@ async function runErrorProgram() {
     ]);
     console.log("Inserted record ID:", result.lastID);
   } catch (err) {
-    console.error("Error inserting record:", err.message);
+    if (err.message.includes("no such table: memo")) {
+      console.error("Error inserting record:", err.message);
+    } else {
+      throw err;
+    }
   }
 
   try {
     const row = await getQuery(db, "SELECT * FROM memo WHERE id = ?", [999]);
     console.log("Retrieved record:", row);
   } catch (err) {
-    console.error("Error retrieving record:", err.message);
+    if (err.message.includes("no such table: memo")) {
+      console.error("Error retrieving record:", err.message);
+    } else {
+      throw err;
+    }
   } finally {
     await runQuery(db, "DROP TABLE book");
     await db.close();
