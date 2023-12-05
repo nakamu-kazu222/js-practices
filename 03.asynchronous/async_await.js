@@ -38,9 +38,10 @@ async function runErrorProgram() {
       "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
     );
     try {
-      await runQuery(db, "INSERT INTO memo (title) VALUES (?)", [
+      const result = await runQuery(db, "INSERT INTO memo (title) VALUES (?)", [
         "Sample Title",
       ]);
+      console.log("Inserted record ID:", result.lastID);
     } catch (err) {
       console.error("Error inserting record:", err.message);
     }

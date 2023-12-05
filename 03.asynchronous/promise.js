@@ -36,6 +36,9 @@ function runErrorProgram() {
     .then(() =>
       runQuery(db, "INSERT INTO memo (title) VALUES (?)", ["Sample Title"])
     )
+    .then((result) => {
+      console.log("Inserted record ID:", result.lastID);
+    })
     .catch((err) => {
       console.error("Error inserting record:", err.message);
     })
