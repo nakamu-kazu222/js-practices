@@ -56,6 +56,4 @@ function runErrorProgram() {
     });
 }
 
-runNoErrorProgram()
-  .then(() => runErrorProgram())
-  .catch((err) => console.error("Error:", err.message));
+runNoErrorProgram().then(() => runErrorProgram());
