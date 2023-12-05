@@ -21,8 +21,9 @@ function runNoErrorProgram() {
       return runQuery(db, "DROP TABLE book");
     })
     .then(() => {
-      db.close();
-      return setTimeout(100);
+      return setTimeout(() => {
+        db.close();
+      }, 100);
     });
 }
 

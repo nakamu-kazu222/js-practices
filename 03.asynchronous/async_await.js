@@ -24,7 +24,7 @@ async function runNoErrorProgram() {
 
     await runQuery(db, "DROP TABLE book");
   } finally {
-    db.close();
+    await db.close();
     await setTimeout(100);
   }
 }
@@ -56,7 +56,7 @@ async function runErrorProgram() {
     console.error("Error retrieving record:", err.message);
   } finally {
     await runQuery(db, "DROP TABLE book");
-    db.close();
+    await db.close();
   }
 }
 
