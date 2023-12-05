@@ -33,25 +33,29 @@ function runErrorProgram() {
   db.run(
     "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
     () => {
-      db.run("INSERT INTO memo (title) VALUES (?)", ["Sample Title"], (err) => {
-        if (err) {
-          console.error("Error inserting record:", err.message);
-        } else {
-          console.log("Record inserted successfully");
-        }
-
-        db.get("SELECT * FROM memo WHERE id = ?", [999], (err, row) => {
+      db.run(
+        "INSERT INTO memo (title) VALUES (?)",
+        ["Sample Title"],
+        function (err) {
           if (err) {
-            console.error("Error retrieving record:", err.message);
+            console.error("Error inserting record:", err.message);
           } else {
-            console.log("Retrieved record:", row);
+            console.log("Inserted record ID:", this.lastID);
           }
 
-          db.run("DROP TABLE book", () => {
-            db.close();
+          db.get("SELECT * FROM memo WHERE id = ?", [999], (err, row) => {
+            if (err) {
+              console.error("Error retrieving record:", err.message);
+            } else {
+              console.log("Retrieved record:", row);
+            }
+
+            db.run("DROP TABLE book", () => {
+              db.close();
+            });
           });
-        });
-      });
+        }
+      );
     }
   );
 }
