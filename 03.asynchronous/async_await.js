@@ -5,28 +5,25 @@ import { runQuery, getQuery } from "./query.js";
 async function runNoErrorProgram() {
   const db = new sqlite3.Database(":memory:");
 
-  try {
-    await runQuery(
-      db,
-      "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
-    );
+  await runQuery(
+    db,
+    "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
+  );
 
-    const result = await runQuery(db, "INSERT INTO book (title) VALUES (?)", [
-      "Sample Title",
-    ]);
+  const result = await runQuery(db, "INSERT INTO book (title) VALUES (?)", [
+    "Sample Title",
+  ]);
 
-    console.log("Inserted record ID:", result.lastID);
+  console.log("Inserted record ID:", result.lastID);
 
-    const row = await getQuery(db, "SELECT * FROM book WHERE id = ?", [
-      result.lastID,
-    ]);
-    console.log("Retrieved record:", row);
+  const row = await getQuery(db, "SELECT * FROM book WHERE id = ?", [
+    result.lastID,
+  ]);
+  console.log("Retrieved record:", row);
 
-    await runQuery(db, "DROP TABLE book");
-  } finally {
-    await db.close();
-    await setTimeout(100);
-  }
+  await runQuery(db, "DROP TABLE book");
+  await db.close();
+  await setTimeout(100);
 }
 
 async function runErrorProgram() {
