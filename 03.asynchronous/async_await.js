@@ -62,4 +62,4 @@ async function main() {
   await runErrorProgram();
 }
 
-main().catch((err) => console.error("Error:", err.message));
+main();
