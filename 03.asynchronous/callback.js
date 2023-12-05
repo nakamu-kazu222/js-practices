@@ -1,8 +1,8 @@
 import sqlite3 from "sqlite3";
 
-const db = new sqlite3.Database(":memory:");
-
 function runNoErrorProgram() {
+  const db = new sqlite3.Database(":memory:");
+
   db.run(
     "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
     () => {
