@@ -18,8 +18,8 @@ function runNoErrorProgram() {
     })
     .then((row) => {
       console.log("Retrieved record:", row);
+      return runQuery(db, "DROP TABLE book");
     })
-    .then(() => runQuery(db, "DROP TABLE book"))
     .then(() => {
       db.close();
       return setTimeout(100);
@@ -48,8 +48,8 @@ function runErrorProgram() {
     })
     .catch((err) => {
       console.error("Error retrieving record:", err.message);
+      return runQuery(db, "DROP TABLE book");
     })
-    .then(() => runQuery(db, "DROP TABLE book"))
     .then(() => {
       db.close();
     })
