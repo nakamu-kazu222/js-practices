@@ -29,21 +29,18 @@ async function runNoErrorProgram() {
 async function runErrorProgram() {
   const db = new sqlite3.Database(":memory:");
 
+  await runQuery(
+    db,
+    "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
+  );
+
   try {
-    await runQuery(
-      db,
-      "CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
-    );
-    try {
-      const result = await runQuery(db, "INSERT INTO memo (title) VALUES (?)", [
-        "Sample Title",
-      ]);
-      console.log("Inserted record ID:", result.lastID);
-    } catch (err) {
-      console.error("Error inserting record:", err.message);
-    }
+    const result = await runQuery(db, "INSERT INTO memo (title) VALUES (?)", [
+      "Sample Title",
+    ]);
+    console.log("Inserted record ID:", result.lastID);
   } catch (err) {
-    console.error("Error creating table:", err.message);
+    console.error("Error inserting record:", err.message);
   }
 
   try {
