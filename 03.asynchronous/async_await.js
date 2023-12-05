@@ -1,6 +1,6 @@
 import sqlite3 from "sqlite3";
 import { setTimeout } from "timers/promises";
-import { runQuery, getQuery } from "./run_get_query.js";
+import { runQuery, getQuery } from "./query.js";
 
 async function runNoErrorProgram() {
   const db = new sqlite3.Database(":memory:");
