@@ -20,7 +20,7 @@ export class MemoDatabase {
   }
 
   list_memos(callback) {
-    this.db.all("SELECT * FROM memos", callback);
+    this.db.all("SELECT * FROM memos ORDER BY id ASC", callback);
   }
 
   delete_memo(id, callback) {
