@@ -16,8 +16,10 @@ export class MemoCommand {
       await this.add_option();
     } else if (this.command === "-l") {
       await this.list_option();
-    } else if (this.command === "-r" || this.command === "-d") {
-      await this.view_or_delete_option();
+    } else if (this.command === "-r") {
+      await this.view_option();
+    } else if (this.command === "-d") {
+      await this.delete_option();
     } else {
       this.invalid_option();
     }
@@ -57,7 +59,22 @@ export class MemoCommand {
     });
   }
 
-  async view_or_delete_option() {
+  async view_option() {
+    await this.memo_select("Choose a note you want to see:", (memo) => {
+      console.log(memo.content);
+    });
+  }
+
+  async delete_option() {
+    await this.memo_select("Choose a note you want to delete:", (memo) => {
+      this.memo_database.delete_memo(memo.id, () => {
+        console.log("Memo deleted successfully!");
+        this.console_operator.close_interface();
+      });
+    });
+  }
+
+  async memo_select(prompt_message, action) {
     this.memo_database.list_memos(async (err, memos) => {
       if (err) {
         console.error(err);
@@ -74,11 +91,6 @@ export class MemoCommand {
           value: memo.id,
         }));
 
-        const prompt_message =
-          this.command === "-r"
-            ? "Choose a note you want to see:"
-            : "Choose a note you want to delete:";
-
         try {
           const answer = await this.console_operator.select_memo_list(
             prompt_message,
@@ -94,14 +106,7 @@ export class MemoCommand {
             this.console_operator.close_interface();
           }
 
-          if (this.command === "-r") {
-            console.log(selected_memo.content);
-          } else if (this.command === "-d") {
-            this.memo_database.delete_memo(selected_memo.id, () => {
-              console.log("Memo deleted successfully!");
-              this.console_operator.close_interface();
-            });
-          }
+          action(selected_memo);
         } catch (error) {
           console.error(error.message);
           this.console_operator.close_interface();
