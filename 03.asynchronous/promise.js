@@ -44,8 +44,8 @@ function runErrorProgram() {
     })
     .catch((err) => {
       console.error("Error retrieving record:", err.message);
-      return runQuery(db, "DROP TABLE book");
     })
+    .then(() => runQuery(db, "DROP TABLE book"))
     .then(() => {
       db.close();
     });
