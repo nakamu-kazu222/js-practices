@@ -1,5 +1,4 @@
 import sqlite3 from "sqlite3";
-import { setTimeout } from "timers/promises";
 import { runQuery, getQuery } from "./query.js";
 
 function runNoErrorProgram() {
@@ -20,11 +19,7 @@ function runNoErrorProgram() {
       console.log("Retrieved record:", row);
       return runQuery(db, "DROP TABLE book");
     })
-    .then(() => {
-      return setTimeout(() => {
-        db.close();
-      }, 100);
-    });
+    .then(() => db.close());
 }
 
 function runErrorProgram() {

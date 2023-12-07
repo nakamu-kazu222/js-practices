@@ -1,5 +1,4 @@
 import sqlite3 from "sqlite3";
-import { setTimeout } from "timers/promises";
 import { runQuery, getQuery } from "./query.js";
 
 async function runNoErrorProgram() {
@@ -23,7 +22,6 @@ async function runNoErrorProgram() {
 
   await runQuery(db, "DROP TABLE book");
   await db.close();
-  await setTimeout(100);
 }
 
 async function runErrorProgram() {
