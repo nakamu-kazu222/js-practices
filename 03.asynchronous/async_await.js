@@ -56,8 +56,8 @@ async function runErrorProgram() {
     }
   } finally {
     await runQuery(db, "DROP TABLE book");
-    db.close();
   }
+  db.close();
 }
 
 async function main() {
