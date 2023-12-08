@@ -38,7 +38,7 @@ async function runErrorProgram() {
     ]);
     console.log("Inserted record ID:", result.lastID);
   } catch (err) {
-    if (err.message.includes("no such table: memo")) {
+    if (err instanceof Error) {
       console.error("Error inserting record:", err.message);
     } else {
       throw err;
@@ -49,7 +49,7 @@ async function runErrorProgram() {
     const row = await getQuery(db, "SELECT * FROM memo WHERE id = ?", [999]);
     console.log("Retrieved record:", row);
   } catch (err) {
-    if (err.message.includes("no such table: memo")) {
+    if (err instanceof Error) {
       console.error("Error retrieving record:", err.message);
     } else {
       throw err;
