@@ -60,9 +60,5 @@ async function runErrorProgram() {
   db.close();
 }
 
-async function main() {
-  await runNoErrorProgram();
-  await runErrorProgram();
-}
-
-main();
+await runNoErrorProgram();
+await runErrorProgram();
