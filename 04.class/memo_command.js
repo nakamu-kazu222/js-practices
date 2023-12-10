@@ -41,37 +41,61 @@ export class MemoCommand {
 
   async list_option() {
     this.memo_database.list_memos((err, memos) => {
-      if (err) {
-        console.error(err);
-        this.console_operator.close_interface();
-        return;
-      }
-
-      if (memos.length === 0) {
-        console.log("No memos found.");
-      } else {
-        memos.forEach((memo) => {
-          console.log(`${memo.content.split("\n")[0]}`);
-        });
-      }
-
+      this.handle_memo_operation(
+        memos.length === 0,
+        memos,
+        "No memos found.",
+        (memos) => {
+          memos.forEach((memo) => {
+            console.log(`${memo.content.split("\n")[0]}`);
+          });
+        }
+      );
       this.console_operator.close_interface();
     });
   }
 
   async view_option() {
-    await this.memo_select("Choose a note you want to see:", (memo) => {
-      console.log(memo.content);
+    await this.memo_select("Choose a note you want to see:", async (memoId) => {
+      this.memo_database.get_memo(memoId, (err, memo) => {
+        this.handle_memo_operation(
+          err,
+          memo,
+          "Error: Memo not found.",
+          (memo) => {
+            console.log(memo.content);
+          }
+        );
+        this.console_operator.close_interface();
+      });
     });
   }
 
   async delete_option() {
-    await this.memo_select("Choose a note you want to delete:", (memo) => {
-      this.memo_database.delete_memo(memo.id, () => {
-        console.log("Memo deleted successfully!");
-        this.console_operator.close_interface();
-      });
-    });
+    await this.memo_select(
+      "Choose a note you want to delete:",
+      async (memoId) => {
+        this.memo_database.delete_memo(memoId, (err) => {
+          this.handle_memo_operation(
+            err,
+            null,
+            "Error: Memo not found.",
+            () => {
+              console.log("Memo deleted successfully!");
+            }
+          );
+          this.console_operator.close_interface();
+        });
+      }
+    );
+  }
+
+  handle_memo_operation(err, memo, errorMessage, action) {
+    if (err) {
+      console.log(errorMessage);
+    } else {
+      action(memo);
+    }
   }
 
   async memo_select(prompt_message, action) {
@@ -97,16 +121,11 @@ export class MemoCommand {
             choices
           );
 
-          const selected_memo = memos.find(
-            (memo) => memo.content.split("\n")[0] === answer.selected_item
-          );
-
-          if (!selected_memo) {
+          if (!answer.selected_item) {
             console.log("Error: Selected memo not found.");
             this.console_operator.close_interface();
           }
-
-          action(selected_memo);
+          action(answer.selected_item);
         } catch (error) {
           console.error(error.message);
           this.console_operator.close_interface();
