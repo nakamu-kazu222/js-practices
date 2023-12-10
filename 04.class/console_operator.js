@@ -16,6 +16,9 @@ export class ConsoleOperator {
       name: "selected_item",
       message,
       choices,
+      result() {
+        return this.focused.value;
+      },
     });
   }
 
