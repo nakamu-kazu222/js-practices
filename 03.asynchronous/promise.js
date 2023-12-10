@@ -19,7 +19,17 @@ function runNoErrorProgram() {
       console.log("Retrieved record:", row);
       return runQuery(db, "DROP TABLE book");
     })
-    .then(() => db.close());
+    .then(() => {
+      return new Promise((resolve, reject) => {
+        db.close((err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      });
+    });
 }
 
 function runErrorProgram() {
@@ -47,7 +57,15 @@ function runErrorProgram() {
     })
     .then(() => runQuery(db, "DROP TABLE book"))
     .then(() => {
-      db.close();
+      return new Promise((resolve, reject) => {
+        db.close((err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      });
     });
 }
 
