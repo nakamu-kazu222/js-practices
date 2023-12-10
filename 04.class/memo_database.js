@@ -15,6 +15,10 @@ export class MemoDatabase {
       `);
   }
 
+  get_memo(id, callback) {
+    this.db.get("SELECT * FROM memos WHERE id = ?", id, callback);
+  }
+
   add_memo(content, callback) {
     this.db.run("INSERT INTO memos (content) VALUES (?)", content, callback);
   }
