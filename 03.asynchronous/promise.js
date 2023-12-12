@@ -1,6 +1,18 @@
 import sqlite3 from "sqlite3";
 import { runQuery, getQuery } from "./query.js";
 
+function closeDatabase(db) {
+  return new Promise((resolve, reject) => {
+    db.close((err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 function runNoErrorProgram() {
   const db = new sqlite3.Database(":memory:");
 
@@ -19,17 +31,7 @@ function runNoErrorProgram() {
       console.log("Retrieved record:", row);
       return runQuery(db, "DROP TABLE book");
     })
-    .then(() => {
-      return new Promise((resolve, reject) => {
-        db.close((err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      });
-    });
+    .then(() => closeDatabase(db));
 }
 
 function runErrorProgram() {
@@ -56,17 +58,7 @@ function runErrorProgram() {
       console.error("Error retrieving record:", err.message);
     })
     .then(() => runQuery(db, "DROP TABLE book"))
-    .then(() => {
-      return new Promise((resolve, reject) => {
-        db.close((err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      });
-    });
+    .then(() => closeDatabase(db));
 }
 
 runNoErrorProgram().then(() => runErrorProgram());

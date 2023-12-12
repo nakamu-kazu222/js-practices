@@ -1,6 +1,18 @@
 import sqlite3 from "sqlite3";
 import { runQuery, getQuery } from "./query.js";
 
+async function closeDatabase(db) {
+  return new Promise((resolve, reject) => {
+    db.close((err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 async function runNoErrorProgram() {
   const db = new sqlite3.Database(":memory:");
 
@@ -21,7 +33,7 @@ async function runNoErrorProgram() {
   console.log("Retrieved record:", row);
 
   await runQuery(db, "DROP TABLE book");
-  db.close();
+  closeDatabase(db);
 }
 
 async function runErrorProgram() {
@@ -57,7 +69,7 @@ async function runErrorProgram() {
   } finally {
     await runQuery(db, "DROP TABLE book");
   }
-  db.close();
+  closeDatabase(db);
 }
 
 await runNoErrorProgram();
