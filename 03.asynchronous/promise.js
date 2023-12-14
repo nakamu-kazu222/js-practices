@@ -1,17 +1,6 @@
 import sqlite3 from "sqlite3";
 import { runQuery, getQuery } from "./query.js";
-
-function closeDatabase(db) {
-  return new Promise((resolve, reject) => {
-    db.close((err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
+import { closeDatabase } from "./close_database.js";
 
 function runNoErrorProgram() {
   const db = new sqlite3.Database(":memory:");
